@@ -1,0 +1,112 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>STARMARK Application</title>
+        <link rel="stylesheet" href="./Scan.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+    <body>
+        <header>
+            <img src="./Image/STMK.webp" alt="STARMARK Logo" style="width: auto; height: auto;">
+        </header>
+
+        <div class="section">
+            <video id="barcode-scanner" style="width: 100%; height: auto;"></video>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" id="toggle-scanner" class="btn-toggle-scan">เปิดสแกน</button>
+            <button type="button" id="clear-data" class="btn-clear-data">ลบข้อมูล</button>
+        </div>
+        
+        <div class="container-1">
+            <div class="ProjectName">
+                โครงการ
+                <input type="text" class="detail" placeholder="ชื่อโครงการ">
+            </div>
+            <div class="OrderNumber">
+                เลขที่เอกสาร
+                <input type="text" class="detail" placeholder="เลขที่เอกสาร">
+            </div>
+        </div>  
+        
+        <div class="container-2">
+            <div class="row-1">
+                <div class="Building">
+                    ตึก
+                    <input type="text" class="detail" placeholder="ตึก">
+                </div>
+                <div class="Floor">
+                    ชั้น
+                    <input type="text" class="detail" placeholder="ชั้น">
+                </div>
+                <div class="Type">
+                    Type
+                    <input type="text" class="detail" placeholder="Type">
+                </div>
+            </div>
+            <div class="row-2">
+                <div class="Room">
+                    ห้อง
+                    <input type="text" class="detail" placeholder="ห้อง">
+                </div>
+                <div class="Note">
+                    หมายเหตุ
+                    <input type="text" class="detail" placeholder="หมายเหตุ">
+                </div>
+                <div class="Group">
+                    หมวดงาน
+                    <input type="text" class="detail" placeholder="หมวดงาน">
+                </div>
+            </div>
+        </div>
+        
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>Product Article</th>
+                    <th>Product Name</th>
+                    <th>No</th>
+                    <th>Product</th>
+                    <th>Pack</th>
+                    <th>QC ผลิต</th>
+                    <th>คลัง</th>
+                    <th>จัดส่ง</th>
+                    <th>ไซต์</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ข้อมูลสินค้า ดึงมาจาก api -->
+            </tbody>
+        </table>
+
+            <div class="text-inputs">
+                <div class="text-input">
+                    QC ผู้ตรวจ <input type="text" class="signature-input" placeholder="กรอกชื่อหรือลายเซ็นต์">
+                </div>
+                <div class="text-input">
+                    ผลิตผู้ส่ง <input type="text" class="signature-input" placeholder="กรอกชื่อหรือลายเซ็นต์">
+                </div>
+                <div class="text-input">
+                    คลังผู้รับ <input type="text" class="signature-input" placeholder="กรอกชื่อหรือลายเซ็นต์">
+                </div>
+                <div class="text-input">
+                    จัดส่ง <input type="text" class="signature-input" placeholder="กรอกชื่อหรือลายเซ็นต์">
+                </div>
+                <div class="text-input">
+                    หน้าไซต์ผู้รับ <input type="text" class="signature-input" placeholder="กรอกชื่อหรือลายเซ็นต์">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-right: 20px;">
+                <button type="button" id="save-button" class="btn-save">บันทึก</button>
+            </div>
+
+        
+        <script src="https://unpkg.com/@zxing/library@latest"></script>
+        <script src="./Scan.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+    </html>

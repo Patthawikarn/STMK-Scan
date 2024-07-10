@@ -1,0 +1,170 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleScannerButton = document.getElementById('toggle-scanner');
+    const clearDataButton = document.getElementById('clear-data');
+    const saveButton = document.getElementById('save-button');
+    const productTableBody = document.querySelector('#productTable tbody');
+
+    const projectNameInput = document.querySelector('.ProjectName input');
+    const orderNumberInput = document.querySelector('.OrderNumber input');
+    const buildingInput = document.querySelector('.Building input');
+    const floorInput = document.querySelector('.Floor input');
+    const typeInput = document.querySelector('.Type input');
+    const roomInput = document.querySelector('.Room input');
+    const noteInput = document.querySelector('.Note input');
+    const groupInput = document.querySelector('.Group input');
+
+    let isScanning = false;
+    let scanner = null;
+
+    toggleScannerButton.addEventListener('click', function () {
+        if (isScanning) {
+            stopScanner();
+        } else {
+            startScanner();
+        }
+    });
+
+    clearDataButton.addEventListener('click', function () {
+        clearData();
+    });
+
+    saveButton.addEventListener('click', function () {
+        saveData();
+    });
+
+    function startScanner() {
+        isScanning = true;
+        toggleScannerButton.textContent = 'ปิดสแกน';
+
+        codeReader = new ZXing.BrowserBarcodeReader();
+        codeReader.decodeFromVideoDevice(null, 'barcode-scanner', (result, err) => {
+            if (result) {
+                console.log('Scanned barcode:', result.text);
+                handleScannedBarcode(result.text);
+            }
+            if (err && !(err instanceof ZXing.NotFoundException)) {
+                console.error(err);
+                alert('An error occurred while scanning.');
+                stopScanner();
+            }
+        }).catch(err => {
+            console.error('Error initializing ZXing:', err);
+            alert('An error occurred while initializing the scanner.');
+            stopScanner();
+        });
+    }
+
+    function stopScanner() {
+        isScanning = false;
+        toggleScannerButton.textContent = 'เปิดสแกน';
+        if (codeReader) {
+            codeReader.reset();
+        }
+    }
+
+    function handleScannedBarcode(code) {
+        if (isBarcodeInTable(code)) {
+            highlightMatchingRow(code);
+        } else {
+            fetchDataFromAPI(code);
+        }
+    }
+
+    function fetchDataFromAPI(code) {
+        fetch('http://starmark.work/ProductOnsiteAPI/api/onsite/load', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ barcode: code })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data from API:', data);
+            if (data && data.length > 0) {
+                showBarcodeResult(data);
+            } else {
+                alert('No data found for the scanned barcode.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data from API:', error);
+            alert('An error occurred while fetching product data. Please try again.');
+        });
+    }
+
+    function showBarcodeResult(data) {
+        if (data && data.length > 0) {
+            for (const row of data) {
+                if (!isBarcodeInTable(row.ProductArticle)) {
+                    let newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${row.ProductArticle}</td>
+                        <td>${row.Category}</td>
+                        <td>${row.PackSeqTotal}</td>
+                        <td>${row.ProductSeqTotal}</td>
+                        <td>${row.Codepack}</td>
+                        <td><input type="checkbox" class="qc-checkbox"></td>
+                        <td><input type="checkbox" class="warehouse-checkbox"></td>
+                        <td><input type="checkbox" class="delivery-checkbox"></td>
+                        <td><input type="checkbox" class="site-checkbox"></td>
+                    `;
+                    productTableBody.appendChild(newRow);
+                }
+            }
+
+            // Populate input fields with the first item data
+            projectNameInput.value = data[0].ProjectName;
+            orderNumberInput.value = data[0].OrderNumber;
+            buildingInput.value = data[0].Build;
+            floorInput.value = data[0].Floor;
+            typeInput.value = data[0].Type;
+            roomInput.value = data[0].Room;
+            noteInput.value = data[0].Note;
+            groupInput.value = data[0].Category;
+        }
+    }
+
+    function isBarcodeInTable(barcode) {
+        const rows = productTableBody.querySelectorAll('tr');
+        for (let row of rows) {
+            const cells = row.getElementsByTagName('td');
+            if (cells[0].textContent === barcode) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    function clearInputs() {
+        projectNameInput.value = '';
+        orderNumberInput.value = '';
+        buildingInput.value = '';
+        floorInput.value = '';
+        typeInput.value = '';
+        roomInput.value = '';
+        noteInput.value = '';
+        groupInput.value = '';
+    }
+
+    function clearData() {
+        productTableBody.innerHTML = '';
+        clearInputs();
+    }
+
+    function saveData() {
+        const rows = productTableBody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const qcCheckbox = row.querySelector('.qc-checkbox');
+            const warehouseCheckbox = row.querySelector('.warehouse-checkbox');
+            const deliveryCheckbox = row.querySelector('.delivery-checkbox');
+            const siteCheckbox = row.querySelector('.site-checkbox');
+
+            if (qcCheckbox.checked || warehouseCheckbox.checked || deliveryCheckbox.checked || siteCheckbox.checked) {
+                row.style.backgroundColor = 'rgb(71, 248, 71)';
+            }
+        });
+        alert('บันทึกสำเร็จแล้ว!'); // Display alert message
+    }
+});
