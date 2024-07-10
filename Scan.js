@@ -1,6 +1,6 @@
 // Logout
 document.getElementById('logoutButton').addEventListener('click', () => {
-    window.location.href = './Login.html';
+    window.location.href = './index.html';
 });
 
 document.addEventListener('DOMContentLoaded', function () {

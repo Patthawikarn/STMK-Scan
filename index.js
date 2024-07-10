@@ -7,7 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   if(employeeCode.trim() === '' || password.trim() === '') {
     alert('Please enter both employee code and password.');
   } else {
-    fetch("http://starmark.work/ProductOnsiteAPI/api/login", {
+    fetch("https://starmark.work/ProductOnsiteAPI/api/login", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     })
     .then(data => {
       if (data.Status === "OK") {
-        alert('Login successful!');
+
         window.location.href = "./Scan.html";
       } else {
         throw new Error('Login failed. Please try again.');
