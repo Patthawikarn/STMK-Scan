@@ -7,7 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   if(employeeCode.trim() === '' || password.trim() === '') {
     alert('Please enter both employee code and password.');
   } else {
-    fetch("https://starmark.work/ProductOnsiteAPI/api/login", {
+    fetch("http://starmark.work/ProductOnsiteAPI/api/login", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

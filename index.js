@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function fetchDataFromAPI(code) {
-        fetch('https://starmark.work/ProductOnsiteAPI/api/onsite/load', {
+        fetch('http://starmark.work/ProductOnsiteAPI/api/onsite/load', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function saveData() {
-        fetch("https://starmark.work/ProductOnsiteAPI/api/onsite/upload", {
+        fetch("http://starmark.work/ProductOnsiteAPI/api/onsite/upload", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
